@@ -20,8 +20,20 @@
         </div>
         <button type="submit" class="btn btn-success">Submit</button>
       </form>
+    <hr>
+    <form>
+      <div class="mt-5">
+        <div class="mx-auto col-6">
+            <div class="mb-3">
+                <label for="exampleInputEmail1" class="form-label">Search Food</label>
+                <input type="text" class="form-control" name = "search">        
+            </div>
+            <button type="submit" class="btn btn-secondary">Search</button>
+        </div>
+      </div>
+    </form>
 
-      <table class="table">
+      <table class="table mt-5">
         <thead>
           <tr>
             <th scope="col">#</th>
@@ -40,7 +52,8 @@
               <td>{{recipe.recipe_description}}</td>
               <td><img src="/media/{{recipe.recipe_image}}" style="height: 100px;" > </td>
               <td>
-                <a href="/delete-recipe/{{recipe.id}}"><button class="btn btn-danger">Delete</button></a>
+                <a href="/delete-recipe/{{recipe.id}}"><button class="btn btn-danger m-2">Delete</button></a>
+                <a href="/update-recipe/{{recipe.id}}"><button class="btn btn-success m-2">Update</button></a>
               </td>
             </tr>
             
