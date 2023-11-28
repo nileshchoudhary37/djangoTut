@@ -2,9 +2,12 @@ from django.shortcuts import render, redirect, HttpResponse
 from .models import *
 from django.contrib.auth.models import User
 from django.contrib import messages
+from django.contrib.auth import authenticate, login, logout
+from django.contrib.auth.decorators import login_required
 
 # Create your views here.
 
+@login_required(login_url='/login/')
 def recipes(request):
     if request.method == "POST":
 
@@ -32,6 +35,7 @@ def recipes(request):
     context = {'recipes': queryset}
     return render(request, 'recipes.html', context)
 
+@login_required(login_url='/login/')
 def update_recipe(request, id):
     queryset = Recipe.objects.get(id = id)
     
@@ -56,13 +60,37 @@ def update_recipe(request, id):
     return render(request, 'update_recipes.html', context)
 
 
-
+@login_required(login_url='/login/')
 def delete_recipe(request, id):
     queryset = Recipe.objects.get(id = id)
     queryset.delete()
     return redirect('/recipes/')
 
+def logout_page(request):
+    logout(request)
+    return redirect('/login/')
+
 def login_page(request):
+
+    if request.method == "POST":
+        username = request.POST.get('username')
+        password = request.POST.get('password')
+
+        if not User.objects.filter(username = username).exists():
+           messages.error(request, 'Invalid Username')
+           return redirect('/login/') 
+
+        user = authenticate(username = username, password = password)
+        
+        if user is None:
+           messages.error(request, 'Invalid Password')
+           return redirect('/login/') 
+        else:
+            login(request, user)
+            return redirect('/recipes/')
+
+
+
     return render(request, 'login.html')
 
 def register_page(request):
